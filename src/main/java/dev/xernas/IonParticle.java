@@ -2,16 +2,30 @@ package dev.xernas;
 
 import dev.xernas.particle.Particle;
 import dev.xernas.particle.ParticleException;
+import dev.xernas.types.Identifier;
+import dev.xernas.types.Property;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
+import java.io.EOFException;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
 
 public class IonParticle extends Particle {
 
     private final int SEGMENT_BITS = 0x7F;
     private final int CONTINUE_BIT = 0x80;
+
+    public IonParticle(DataInputStream in) {
+        super(in);
+    }
+
+    public IonParticle(DataOutputStream out) {
+        super(out);
+    }
 
     public IonParticle(Particle particle) {
         super(particle.in(), particle.out());
@@ -28,6 +42,9 @@ public class IonParticle extends Particle {
             byte currentByte;
 
             while (true) {
+                if (in().available() == 0) {
+                    throw new EOFException("No data available to read");
+                }
                 currentByte = in().readByte();
                 value |= (currentByte & SEGMENT_BITS) << position;
                 if ((currentByte & CONTINUE_BIT) == 0) break;
@@ -65,13 +82,13 @@ public class IonParticle extends Particle {
         if (s.length() > i) {
             int j = s.length();
 
-            System.out.println("String too big (was " + j + " characters, max " + i + ")");
+            throw new WriteException("String too big (was " + j + " characters, max " + i + ")");
         } else {
             byte[] abyte = s.getBytes(StandardCharsets.UTF_8);
             int k = i * 3;
 
             if (abyte.length > k) {
-                System.out.println("String too big (was " + abyte.length + " bytes encoded, max " + k + ")");
+                throw new WriteException("String too big (was " + abyte.length + " bytes encoded, max " + k + ")");
             } else {
                 writeVarInt(abyte.length);
                 writeBytes(abyte);
@@ -82,12 +99,12 @@ public class IonParticle extends Particle {
     public String readString(int limit) throws ReadException {
         int size = readVarInt();
         if (size > limit * 4) {
-            System.out.println("String too long (" + size + " > " + limit + " * 4)");
+            throw new ReadException("String too long (" + size + " > " + limit + " * 4)");
         }
         byte[] stringBytes = readBytes(size);
         String string = new String(stringBytes);
         if (string.length() > limit) {
-            System.out.println("String too long (" + string.length() + " > " + limit + ")");
+            throw new ReadException("String too long (" + string.length() + " > " + limit + ")");
         }
         return string;
     }
@@ -100,5 +117,52 @@ public class IonParticle extends Particle {
     @Override
     public String readString() throws ReadException {
         return readString(32767);
+    }
+
+    public UUID readUUID() throws ReadException {
+        return new UUID(readLong(), readLong());
+    }
+
+    public void writeUUID(UUID uuid) throws WriteException {
+        writeLong(uuid.getMostSignificantBits());
+        writeLong(uuid.getLeastSignificantBits());
+    }
+
+    public Identifier readIdentifier() throws ReadException {
+        return Identifier.fromString(readString());
+    }
+
+    public void writeIdentifier(Identifier identifier) throws WriteException {
+        writeString(identifier.toString());
+    }
+
+    public void writeProperty(Property property) throws WriteException {
+        writeString(property.getName(), 32767);
+        writeString(property.getValue(), 32767);
+        writeBoolean(property.getSignature() != null && !property.getSignature().isEmpty());
+        if (property.getSignature() != null) {
+            writeString(property.getSignature(), 32767);
+        }
+    }
+
+    public Property readProperty() throws ReadException {
+        String name = readString();
+        String value = readString();
+        String signature = null;
+        if (readBoolean()) signature = readString();
+        if (signature == null) return new Property(name, value);
+        else return new Property(name, value, signature);
+    }
+
+    public void writeProperties(List<Property> properties) throws WriteException {
+        writeVarInt(properties.size());
+        for (Property property : properties) writeProperty(property);
+    }
+
+    public List<Property> readProperties() throws ReadException {
+        int size = readVarInt();
+        List<Property> properties = new ArrayList<>(size);
+        for (int i = 0; i < size; i++) properties.add(readProperty());
+        return properties;
     }
 }
