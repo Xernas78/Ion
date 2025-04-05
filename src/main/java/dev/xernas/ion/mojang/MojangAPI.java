@@ -1,4 +1,4 @@
-package dev.xernas.mojang;
+package dev.xernas.ion.mojang;
 
 import org.json.JSONObject;
 

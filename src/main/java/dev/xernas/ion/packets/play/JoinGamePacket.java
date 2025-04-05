@@ -1,13 +1,11 @@
-package dev.xernas.packets.status;
+package dev.xernas.ion.packets.play;
 
-import dev.xernas.IonParticle;
-import dev.xernas.packets.IPacket;
-import dev.xernas.packets.PacketData;
+import dev.xernas.ion.IonParticle;
+import dev.xernas.ion.packets.IPacket;
+import dev.xernas.ion.packets.PacketData;
 import dev.xernas.particle.Particle;
 
-public class StatusReqPacket implements IPacket {
-
-    public StatusReqPacket() {}
+public class JoinGamePacket implements IPacket {
 
     @Override
     public void read(PacketData packetData, IonParticle particle) throws Particle.ReadException {
@@ -18,4 +16,5 @@ public class StatusReqPacket implements IPacket {
     public void write(IonParticle particle) throws Particle.WriteException {
 
     }
+
 }

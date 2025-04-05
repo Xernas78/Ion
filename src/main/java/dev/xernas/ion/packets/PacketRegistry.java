@@ -1,15 +1,15 @@
-package dev.xernas.packets;
+package dev.xernas.ion.packets;
 
-import dev.xernas.packets.login.LoginDisconnectPacket;
-import dev.xernas.packets.login.LoginStartPacket;
-import dev.xernas.packets.login.LoginSuccessPacket;
-import dev.xernas.packets.status.StatusReqPacket;
-import dev.xernas.packets.status.StatusResPacket;
+import dev.xernas.ion.packets.login.LoginDisconnectPacket;
+import dev.xernas.ion.packets.login.LoginStartPacket;
+import dev.xernas.ion.packets.login.LoginSuccessPacket;
+import dev.xernas.ion.packets.status.StatusReqPacket;
+import dev.xernas.ion.packets.status.StatusResPacket;
 import dev.xernas.particle.ParticleException;
-import dev.xernas.enums.Bound;
-import dev.xernas.enums.State;
-import dev.xernas.packets.handshake.HandshakePacket;
-import dev.xernas.packets.status.PingPongPacket;
+import dev.xernas.ion.enums.Bound;
+import dev.xernas.ion.enums.State;
+import dev.xernas.ion.packets.handshake.HandshakePacket;
+import dev.xernas.ion.packets.status.PingPongPacket;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
@@ -20,6 +20,11 @@ public class PacketRegistry {
     private static final Map<State, Map<Bound[], Map<Integer, Class<? extends IPacket>>>> packets = new HashMap<>();
 
     static {
+        register(State.HANDSHAKE, 100, EverythingPacket.class, Bound.CLIENTBOUND);
+        register(State.STATUS, 100, EverythingPacket.class, Bound.CLIENTBOUND);
+        register(State.LOGIN, 100, EverythingPacket.class, Bound.CLIENTBOUND);
+        register(State.PLAY, 100, EverythingPacket.class, Bound.CLIENTBOUND);
+
         register(State.HANDSHAKE, 0x00, HandshakePacket.class, Bound.SERVERBOUND);
 
         register(State.STATUS, 0x01, PingPongPacket.class, Bound.SERVERBOUND, Bound.CLIENTBOUND);

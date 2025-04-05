@@ -1,4 +1,4 @@
-package dev.xernas.packets;
+package dev.xernas.ion.packets;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -6,6 +6,11 @@ import java.util.Map;
 public class PacketData {
 
     private final Map<String, Object> data = new HashMap<>();
+    private final boolean isKnown;
+
+    public PacketData(boolean isKnown) {
+        this.isKnown = isKnown;
+    }
 
     public <T> void put(String key, T value) {
         data.put(key, value);
@@ -17,6 +22,10 @@ public class PacketData {
 
     public Map<String, Object> getData() {
         return data;
+    }
+
+    public boolean isKnown() {
+        return isKnown;
     }
 
     public static String mapToString(Map<String, Object> map) {

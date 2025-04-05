@@ -1,4 +1,4 @@
-package dev.xernas.types;
+package dev.xernas.ion.types;
 
 import org.json.JSONObject;
 

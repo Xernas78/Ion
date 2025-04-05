@@ -1,9 +1,9 @@
-package dev.xernas;
+package dev.xernas.ion;
 
 import dev.xernas.particle.Particle;
 import dev.xernas.particle.ParticleException;
-import dev.xernas.types.Identifier;
-import dev.xernas.types.Property;
+import dev.xernas.ion.types.Identifier;
+import dev.xernas.ion.types.Property;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;

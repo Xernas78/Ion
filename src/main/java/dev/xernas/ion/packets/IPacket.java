@@ -1,6 +1,6 @@
-package dev.xernas.packets;
+package dev.xernas.ion.packets;
 
-import dev.xernas.IonParticle;
+import dev.xernas.ion.IonParticle;
 import dev.xernas.particle.Particle;
 
 public interface IPacket {

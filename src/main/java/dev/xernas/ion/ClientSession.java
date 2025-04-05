@@ -1,6 +1,6 @@
-package dev.xernas;
+package dev.xernas.ion;
 
-import dev.xernas.enums.State;
+import dev.xernas.ion.enums.State;
 
 public interface ClientSession {
 

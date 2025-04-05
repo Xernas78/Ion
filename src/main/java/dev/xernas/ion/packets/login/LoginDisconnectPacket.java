@@ -1,10 +1,10 @@
-package dev.xernas.packets.login;
+package dev.xernas.ion.packets.login;
 
-import dev.xernas.IonParticle;
-import dev.xernas.packets.IPacket;
-import dev.xernas.packets.PacketData;
+import dev.xernas.ion.IonParticle;
+import dev.xernas.ion.packets.IPacket;
+import dev.xernas.ion.packets.PacketData;
 import dev.xernas.particle.Particle;
-import dev.xernas.types.ChatComponent;
+import dev.xernas.ion.types.ChatComponent;
 
 public class LoginDisconnectPacket implements IPacket {
 

@@ -1,8 +1,8 @@
-package dev.xernas.packets.status;
+package dev.xernas.ion.packets.status;
 
-import dev.xernas.IonParticle;
-import dev.xernas.packets.IPacket;
-import dev.xernas.packets.PacketData;
+import dev.xernas.ion.IonParticle;
+import dev.xernas.ion.packets.IPacket;
+import dev.xernas.ion.packets.PacketData;
 import dev.xernas.particle.Particle;
 
 public class StatusResPacket implements IPacket {

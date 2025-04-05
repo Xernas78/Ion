@@ -1,4 +1,4 @@
-package dev.xernas.enums;
+package dev.xernas.ion.enums;
 
 public enum Bound {
 
